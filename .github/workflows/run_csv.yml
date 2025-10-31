@@ -1,15 +1,23 @@
 name: Run Serial CSV Creator and Commit
 
 on:
-  workflow_dispatch: {}   # manual run
+  workflow_dispatch: {}
+
+# Give the job permission to push commits
+permissions:
+  contents: write
 
 jobs:
   run-script:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repository (with push token)
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: true
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -24,6 +32,6 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit -m "Add updated serial_numbers.csv" || echo "No changes to commit"
+          git add "Price/day wise price/serial_numbers.csv"
+          git commit -m "Add/Update serial_numbers.csv" || echo "No changes to commit"
           git push
