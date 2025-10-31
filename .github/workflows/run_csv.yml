@@ -1,0 +1,21 @@
+name: Run Serial CSV Creator
+
+on:
+  workflow_dispatch: {}   # run manually from Actions tab
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run CSV Creator
+        run: |
+          python "Price/create_serial_csv.py"
